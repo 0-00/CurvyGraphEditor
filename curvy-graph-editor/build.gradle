@@ -1,0 +1,44 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+apply plugin: 'application'
+
+group 'nz.ctrl'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+project.ext.lwjglVersion = "3.2.3"
+project.ext.jomlVersion = "1.9.19"
+project.ext.lwjglNatives = "natives-windows"
+
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+dependencies {
+    compile group: 'org.joml', name: 'joml', version:jomlVersion
+    
+    compile group: 'org.lwjgl', name: 'lwjgl', version:lwjglVersion
+    compile group: 'org.lwjgl', name: 'lwjgl-glfw', version:lwjglVersion
+    compile group: 'org.lwjgl', name: 'lwjgl-opengl', version:lwjglVersion
+    compile group: 'org.lwjgl', name: 'lwjgl-stb', version:lwjglVersion
+    compile group: 'org.lwjgl', name: 'lwjgl-nanovg', version:lwjglVersion
+    
+    compile group: 'org.lwjgl', name: 'lwjgl', version:lwjglVersion, classifier:lwjglNatives
+    compile group: 'org.lwjgl', name: 'lwjgl-opengl', version:lwjglVersion, classifier:lwjglNatives
+    compile group: 'org.lwjgl', name: 'lwjgl-glfw', version:lwjglVersion, classifier:lwjglNatives
+    compile group: 'org.lwjgl', name: 'lwjgl-stb', version:lwjglVersion, classifier:lwjglNatives
+    compile group: 'org.lwjgl', name: 'lwjgl-nanovg', version:lwjglVersion, classifier:lwjglNatives
+}
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'easing.CurvyGraphEditor'
+        )
+    }
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
